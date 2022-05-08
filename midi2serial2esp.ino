@@ -1,10 +1,30 @@
-void setup() {
-  pinMode(LED_BUILTIN, OUTPUT);
+#include <MIDI.h>
+
+#include "./src/setup.hpp"
+#include "./src/midi.hpp"
+#include "./src/now.hpp"
+
+void setup()
+{
+
+    // CONTROLLER
+    //pin_setup();
+    //midi_setup();
+    //setup_esp_controller();
+
+    // SLAVE
+    setup_esp_slave();
+    setup_leds();
 }
 
-void loop() {
-  digitalWrite(LED_BUILTIN, HIGH);
-  delay(1000);
-  digitalWrite(LED_BUILTIN, LOW);
-  delay(1000);
+void loop()
+{
+    // CONTROLLER
+    //MIDI.read();
+
+
+    // SLAVE
+    //slave_loop();
+
+    //fadeToBlackBy(leds, NUM_LEDS, 50);
 }
