@@ -27,12 +27,12 @@ FASTLED_TARGET="$(ARDUINO_LIBS_DIR)/FastLED/src/FastLED.h"
 PORT=/dev/ttyUSB0
 
 # Command line options (-DMASTER)
-OPTS=
+OPTS=-DSLAVE
 
 # esp8266:bleu 18:FE:34:E4:D0:B8
 
 $(BIN): deps $(SRC)
-	$(INO) compile -b $(BOARD) --build-cache-path $(CACHE_DIR) --build-path $(BUILD_DIR) --build-property "build.extra_flags=\"$(OPTS)\"" --warnings more .
+	$(INO) compile -b $(BOARD) --build-cache-path $(CACHE_DIR) --build-path $(BUILD_DIR) --build-property compiler.cpp.extra_flags=$(OPTS) --warnings more .
 
 upload: deps $(BIN)
 	$(INO) upload -v -b $(BOARD) --input-dir $(BUILD_DIR) -t -p $(PORT)
