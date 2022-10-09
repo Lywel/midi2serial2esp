@@ -3,7 +3,8 @@
         {
             "name": "ESP8266",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/.arduino/data/packages/esp8266/hardware/esp8266/3.0.2/cores/esp8266/**"
             ],
             "defines": [
                 "ESP8266"

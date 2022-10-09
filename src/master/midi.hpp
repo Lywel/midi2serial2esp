@@ -3,8 +3,8 @@
 #include <Arduino.h>
 #include <MIDI.h>
 
-#include "./leds.hpp"
-#include "./now.hpp"
+#include "./io.h"
+#include "./wifi.hpp"
 
 struct CustomBaudRateSettings : public MIDI_NAMESPACE::DefaultSerialSettings
 {
@@ -23,15 +23,15 @@ MIDI_NAMESPACE::MidiInterface<MIDI_NAMESPACE::SerialMIDI<HardwareSerial, CustomB
 void handleNoteOn(byte channel, byte note, byte velocity)
 {
     digitalWrite(LED_1, LOW);
-    buf_msg.on = true;
-    esp_now_send(esp01_red, (uint8_t *)&buf_msg, sizeof(buf_msg));
+    wifi_msg.on = true;
+    esp_now_send(esp01_bre, (uint8_t *)&wifi_msg, sizeof(wifi_msg));
 }
 
 void handleNoteOff(byte channel, byte note, byte velocity)
 {
     digitalWrite(LED_1, HIGH);
-    buf_msg.on = false;
-    esp_now_send(esp01_red, (uint8_t *)&buf_msg, sizeof(buf_msg));
+    wifi_msg.on = false;
+    esp_now_send(esp01_bre, (uint8_t *)&wifi_msg, sizeof(wifi_msg));
 }
 
 void midi_setup()
@@ -40,4 +40,3 @@ void midi_setup()
     MIDI.setHandleNoteOn(handleNoteOn);
     MIDI.setHandleNoteOff(handleNoteOff);
 }
-
