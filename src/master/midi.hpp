@@ -24,14 +24,14 @@ void handleNoteOn(byte channel, byte note, byte velocity)
 {
     digitalWrite(LED_1, LOW);
     wifi_msg.on = true;
-    esp_now_send(esp01_bre, (uint8_t *)&wifi_msg, sizeof(wifi_msg));
+    esp_now_send(broadcast_mac_addr, (uint8_t *)&wifi_msg, sizeof(wifi_msg));
 }
 
 void handleNoteOff(byte channel, byte note, byte velocity)
 {
     digitalWrite(LED_1, HIGH);
     wifi_msg.on = false;
-    esp_now_send(esp01_bre, (uint8_t *)&wifi_msg, sizeof(wifi_msg));
+    esp_now_send(broadcast_mac_addr, (uint8_t *)&wifi_msg, sizeof(wifi_msg));
 }
 
 void midi_setup()

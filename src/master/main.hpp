@@ -8,43 +8,30 @@
 #include "./midi.hpp"
 #include "./wifi.hpp"
 #include "./io.h"
-
-void boot_animation()
-{
-    repeat(3)
-    {
-        digitalWrite(LED_1, LOW);
-        digitalWrite(LED_2, HIGH);
-        delay(200);
-        digitalWrite(LED_2, LOW);
-        digitalWrite(LED_1, HIGH);
-        delay(200);
-    }
-    repeat(3)
-    {
-        digitalWrite(LED_1, HIGH);
-        digitalWrite(LED_2, HIGH);
-        delay(100);
-        digitalWrite(LED_1, LOW);
-        digitalWrite(LED_2, LOW);
-        delay(100);
-    }
-    digitalWrite(LED_1, HIGH);
-    digitalWrite(LED_2, HIGH);
-}
+#include "./animation.hpp"
 
 void _setup()
 {
+    // Serial print will block exectution if Serial.begin han't been called before
+    Serial.begin(115200);
     pinMode(LED_1, OUTPUT);
     pinMode(LED_2, OUTPUT);
 
-    midi_setup();
+    // midi_setup();
     wifi_setup();
 
-    boot_animation();
+    christmas_tree();
 }
 
+long last = 0;
 void _loop()
 {
-    MIDI.read();
+    // MIDI.read();
+    if (millis() - last > 500)
+    {
+        Serial.println("Sending message");
+        last = millis();
+        esp_now_send(broadcast_mac_addr, (uint8_t *)&wifi_msg, sizeof(wifi_msg));
+        wifi_msg.on = !wifi_msg.on;
+    }
 }

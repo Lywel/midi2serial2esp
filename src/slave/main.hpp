@@ -3,31 +3,18 @@
 #include "./wifi.hpp"
 #include "./leds.hpp"
 #include "../utils.hpp"
-
-void boot_animation()
-{
-    repeat(3)
-    {
-        leds_on();
-        delay(500);
-        leds_off();
-        delay(500);
-    }
-    repeat(10)
-    {
-        leds_on();
-        delay(50);
-        leds_off();
-        delay(50);
-    }
-}
+#include "./io.h"
+#include "./animation.hpp"
 
 void _setup()
 {
+    Serial.begin(115200);
+    pinMode(LED, OUTPUT);
+
     wifi_setup();
     leds_setup();
 
-    boot_animation();
+    christmas_tree();
 }
 
 void _loop()
