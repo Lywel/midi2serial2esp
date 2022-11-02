@@ -7,6 +7,7 @@
 
 #define DATA_PIN 2
 
+// TODO: use CRGBArrray for some reasons ?
 CRGB leds[NUM_LEDS];
 
 void leds_setup()
@@ -16,14 +17,13 @@ void leds_setup()
     FastLED.setMaxPowerInVoltsAndMilliamps(5, 2000);
 }
 
-void leds_on()
+void leds_on(CRGB color = CRGB::FairyLightNCC)
 {
-    fill_solid(leds, NUM_LEDS, CRGB::White);
+    fill_solid(leds, NUM_LEDS, color);
     FastLED.show();
 }
 
 void leds_off()
 {
-    FastLED.clear();
-    FastLED.show();
+    FastLED.clear(true);
 }

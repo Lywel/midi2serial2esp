@@ -1,5 +1,7 @@
 #include <MIDI.h>
 
+//#define DEBUG
+
 #ifdef MASTER
 #include "./src/master/main.hpp"
 #else
