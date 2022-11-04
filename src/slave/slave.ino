@@ -1,12 +1,10 @@
-#pragma once
+#include "wifi.hpp"
+#include "leds.hpp"
+#include "../shared/utils.hpp"
+#include "io.h"
+#include "animation.hpp"
 
-#include "./wifi.hpp"
-#include "./leds.hpp"
-#include "../utils.hpp"
-#include "./io.h"
-#include "./animation.hpp"
-
-void _setup()
+void setup()
 {
 #ifdef DEBUG
     Serial.begin(115200);
@@ -23,6 +21,7 @@ void _setup()
 #endif
 }
 
-void _loop()
+void loop()
 {
+    // test
 }

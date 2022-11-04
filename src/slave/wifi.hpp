@@ -4,8 +4,8 @@
 #include <ESP8266WiFi.h>
 #include <espnow.h>
 
-#include "../utils.hpp"
-#include "../now_utils.hpp"
+#include <utils.hpp>
+#include <now_utils.hpp>
 
 #include "./leds.hpp"
 #include "./io.h"

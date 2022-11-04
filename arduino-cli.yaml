@@ -5,7 +5,5 @@ directories:
   data: ./.arduino/data
   downloads: ./.arduino/staging
   user: ./.arduino/user
-library:
-  enable_unsafe_install: false
 sketch:
   always_export_binaries: true

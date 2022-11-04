@@ -4,7 +4,7 @@
 #include <espnow.h>
 
 #include "./animation.hpp"
-#include "../now_utils.hpp"
+#include "../shared/now_utils.hpp"
 
 wifi_msg_s wifi_msg;
 
