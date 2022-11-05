@@ -1,0 +1,5 @@
+.arduino/
+.idea/
+bin/
+src/master/build/
+src/slave/build/
