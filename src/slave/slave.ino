@@ -4,6 +4,8 @@
 #include "io.h"
 #include "animation.hpp"
 
+#define FPS 60
+
 void setup()
 {
 #ifdef DEBUG
@@ -23,5 +25,8 @@ void setup()
 
 void loop()
 {
-    // test
+    EVERY_N_MILLISECONDS(1000 / FPS)
+    {
+        render();
+    }
 }

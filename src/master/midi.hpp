@@ -38,8 +38,16 @@ void handleNoteOn(byte channel, byte note, byte velocity)
 {
     digitalWrite(LED_1, LOW);
     wifi_msg.on = true;
-    wifi_msg.target = (int)note % 3;
-    wifi_msg.color = colors[c++ % 9];
+    if (channel == 1)
+    {
+        wifi_msg.target = 0;
+        wifi_msg.color = CRGB::Aquamarine;
+    }
+    else
+    {
+        wifi_msg.target = ((int)note % 2) + 1;
+        wifi_msg.color = colors[c++ % 9];
+    }
     esp_now_send(broadcast_mac_addr, (uint8_t *)&wifi_msg, sizeof(wifi_msg));
 }
 
@@ -47,7 +55,15 @@ void handleNoteOff(byte channel, byte note, byte velocity)
 {
     digitalWrite(LED_1, HIGH);
     wifi_msg.on = false;
-    wifi_msg.target = (int)note % 3;
+    if (channel == 1)
+    {
+        wifi_msg.target = 0;
+    }
+    else
+    {
+
+        wifi_msg.target = (int)note % 3;
+    }
     esp_now_send(broadcast_mac_addr, (uint8_t *)&wifi_msg, sizeof(wifi_msg));
 }
 
