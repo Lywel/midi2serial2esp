@@ -6,10 +6,12 @@ SHARED_SRC=$(wildcard src/shared/*)
 MASTER_SRC=$(wildcard src/master/*)
 SLAVE_SRC=$(wildcard src/slave/*)
 
+CLI_CONFIG=arduino-cli.yaml
+
 DEPS_DIR=bin
 ARDUINO_DIR=.arduino
 ARDUINO_LIBS_DIR=$(ARDUINO_DIR)/user/libraries
-INO=$(DEPS_DIR)/arduino-cli
+INO=$(DEPS_DIR)/arduino-cli --config-file $(CLI_CONFIG)
 BOARDS_TARGET=$(ARDUINO_DIR)/data/package_esp8266com_index.json
 LIBS_TARGET=$(ARDUINO_DIR)/data/library_index.json
 MIDI_TARGET=$(ARDUINO_LIBS_DIR)/MIDI_Library/CMakeLists.txt
