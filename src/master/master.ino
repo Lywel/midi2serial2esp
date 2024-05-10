@@ -22,7 +22,13 @@ void setup()
     christmas_tree();
 }
 
+const char data[] = "Test data";
+
 void loop()
 {
     MIDI.read();
+    EVERY_N_MILLISECONDS(1000)
+    {
+        esp_now_send(broadcast_mac_addr, data, sizeof(data));
+    }
 }
