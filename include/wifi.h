@@ -2,11 +2,16 @@
 
 #define WIFI_CHANNEL 1
 
-#include <FastLED.h>
+enum msg_type {
+    DISCOVER,
+    ACKNOWLEDGE,
+    CONTROL,
+};
 
 typedef struct wifi_msg_s
 {
-    int8 target = -1;
+    enum msg_type type;
+    int8_t target = -1;
     bool on = false;
-    CRGB color = CRGB::FairyLightNCC;
+    uint32_t color = 0x228B22;
 } wifi_msg_s;

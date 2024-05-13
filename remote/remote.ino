@@ -4,15 +4,6 @@
 
 #include <Ticker.h>
 
-char alive_msg[] = "I'm alive";
-Ticker alive_ticker;
-
-void alive() {
-  PRINTLN(alive_msg);
-  esp_now_send(cast_addr, (uint8_t*)alive_msg, sizeof(alive_msg));
-}
-
-
 void setup() {
 #ifdef DEBUG
   // Don't use the led on esp8266-01 while using pin 2
@@ -24,8 +15,6 @@ void setup() {
   leds_setup();
 #endif
   espnow_setup();
-
-  alive_ticker.attach(10, alive);
 }
 
 void loop() {
