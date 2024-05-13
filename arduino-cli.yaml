@@ -1,9 +1,0 @@
-board_manager:
-  additional_urls:
-    - http://arduino.esp8266.com/stable/package_esp8266com_index.json
-directories:
-  data: ./.arduino/data
-  downloads: ./.arduino/staging
-  user: ./.arduino/user
-sketch:
-  always_export_binaries: true
