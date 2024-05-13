@@ -16,6 +16,7 @@ BOARDS_TARGET=$(ARDUINO_DIR)/data/package_esp8266com_index.json
 LIBS_TARGET=$(ARDUINO_DIR)/data/library_index.json
 MIDI_TARGET=$(ARDUINO_LIBS_DIR)/MIDI_Library/CMakeLists.txt
 FASTLED_TARGET=$(ARDUINO_LIBS_DIR)/FastLED/library.json
+TICKER_TARGET=$(ARDUINO_LIBS_DIR)/Ticker/library.json
 
 BOARD_PACKAGE=esp8266:esp8266
 
@@ -46,18 +47,18 @@ SLAVE_FLAGS=$(COMMON_FLAGS) \
 MASTER_BUILD_TARGET=$(MASTER_BUILD_PATH)/master.ino.elf
 SLAVE_BUILD_TARGET=$(SLAVE_BUILD_PATH)/slave.ino.elf
 
-DEPS_TARGETS=$(BOARDS_TARGET) $(MIDI_TARGET) $(FASTLED_TARGET)
+DEPS_TARGETS=$(BOARDS_TARGET) $(MIDI_TARGET) $(FASTLED_TARGET) $(TICKER_TARGET)
 
 
 
 # Compile only
 .PHONY: all
-all: $(MASTER_BUILD_TARGET) $(SLAVE_BUILD_TARGET)
+all: $(DEPS_TARGET) $(MASTER_BUILD_TARGET) $(SLAVE_BUILD_TARGET)
 
-$(MASTER_BUILD_TARGET): $(MASTER_SRC) $(SHARED_SRC) $(DEPS_TARGETS)
+$(MASTER_BUILD_TARGET): $(MASTER_SRC) $(SHARED_SRC) #$(DEPS_TARGETS)
 	$(INO) compile -b $(MASTER_BOARD) $(MASTER_FLAGS) src/master
 
-$(SLAVE_BUILD_TARGET): $(SLAVE_SRC) $(SHARED_SRC) $(DEPS_TARGETS)
+$(SLAVE_BUILD_TARGET): $(SLAVE_SRC) $(SHARED_SRC) #$(DEPS_TARGETS)
 	$(INO) compile -b $(SLAVE_BOARD) $(SLAVE_FLAGS) src/slave
 
 
@@ -74,7 +75,7 @@ slave: $(SLAVE_BUILD_TARGET)
 # Build dependancies
 
 $(INO):
-	curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
+	#curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
 
 $(BOARDS_TARGET): $(INO)
 	$(INO) core update-index 
@@ -88,6 +89,9 @@ $(MIDI_TARGET): $(INO) $(LIBS_TARGET)
 
 $(FASTLED_TARGET): $(INO) $(LIBS_TARGET)
 	$(INO) lib install "FastLED"
+
+$(TICKER_TARGET): $(INO) $(LIBS_TARGET)
+	$(INO) lib install "Ticker"
 
 .PHONY: clean
 clean:

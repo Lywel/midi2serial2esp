@@ -4,6 +4,7 @@
 #include "io.h"
 #include "animation.hpp"
 
+#define DEBUG true
 #define FPS 60
 
 void setup()
@@ -16,7 +17,10 @@ void setup()
 #endif
 
     wifi_setup();
+
+#ifndef DEBUG
     leds_setup();
+#endif
 
 #ifdef DEBUG
     christmas_tree();
@@ -25,8 +29,10 @@ void setup()
 
 void loop()
 {
+#ifndef DEBUG
     EVERY_N_MILLISECONDS(1000 / FPS)
     {
         render();
     }
+#endif
 }

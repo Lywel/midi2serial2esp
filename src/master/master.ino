@@ -26,9 +26,8 @@ const char data[] = "Test data";
 
 void loop()
 {
-    MIDI.read();
     EVERY_N_MILLISECONDS(1000)
     {
-        esp_now_send(broadcast_mac_addr, data, sizeof(data));
+        esp_now_send(broadcast_mac_addr, (u8*)data, sizeof(data));
     }
 }

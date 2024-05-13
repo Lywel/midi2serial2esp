@@ -2,7 +2,10 @@
 
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
+#include <ESP8266WiFi.h>
+extern "C" {
 #include <espnow.h>
+}
 
 #include <utils.hpp>
 #include <now_utils.hpp>
@@ -11,19 +14,24 @@
 #include "./io.h"
 #include "./animation.hpp"
 
-int8 my_id = 2;
+int8 my_id = 1;
 
 void on_data_recv_slave(uint8_t *addr, uint8_t *data, uint8_t len)
 {
-    PRINT(" <<< [");
-    print_mac_addr(addr);
-    PRINT("] ");
+//print_mac_addr(addr);
+    PRINT(" (");
+    PRINT(len);
+    PRINTLN(")> ");
+    //PRINTLN((char *)data);
+    return;
 
     wifi_msg_s *wifi_msg = (wifi_msg_s *)data;
 
     // TODO: explorer why this copy would be needed
     // memcpy(&wifi_msg, data, len);
 
+    PRINT("Target: ");
+    PRINTLN(wifi_msg->target);
     if (wifi_msg->target != my_id && wifi_msg->target != -1)
         return;
 
@@ -59,4 +67,5 @@ void wifi_setup()
 
     // Don't need to register anyone if the master is broadcasting
     // esp_now_add_peer(master_mac_addr, ESP_NOW_ROLE_CONTROLLER, 1, NULL, 0);
+    esp_now_add_peer(NULL, ESP_NOW_ROLE_CONTROLLER, 1, NULL, 0);
 }

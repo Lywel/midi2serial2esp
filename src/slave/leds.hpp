@@ -24,10 +24,28 @@ void leds_setup()
     FastLED.addLeds<WS2812B, DATA_PIN, GRB>(leds, NUM_LEDS);
     // FastLED.setBrightness(max_bright);
     FastLED.setMaxPowerInVoltsAndMilliamps(5, 2000);
+    fill_solid(leds, NUM_LEDS, CRGB::FairyLightNCC);
+        FastLED.show();
+    delay(1000);
+    fill_solid(leds, NUM_LEDS, CRGB::Black);
+        FastLED.show();
+    delay(1000);
+    fill_solid(leds, NUM_LEDS, CRGB::FairyLightNCC);
+        FastLED.show();
+    delay(1000);
+    fill_solid(leds, NUM_LEDS, CRGB::Black);
+        FastLED.show();
+    delay(1000);
+    fill_solid(leds, NUM_LEDS, CRGB::FairyLightNCC);
+        FastLED.show();
+    delay(4000);
+    fill_solid(leds, NUM_LEDS, CRGB::Black);
+        FastLED.show();
 }
 
 void leds_on(CRGB color = CRGB::FairyLightNCC)
 {
+    PRINTLN("LED ON");
     // fill_solid(leds, NUM_LEDS, color);
     scene.color = color;
     scene.frame = 0;
