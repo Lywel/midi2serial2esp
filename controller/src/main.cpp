@@ -23,7 +23,7 @@ struct remote {
 
 inline bool operator<(const remote& lhs, const remote& rhs)
 {
-  return lhs.addr[0] < rhs.addr[0];
+  return lhs.addr[5] < rhs.addr[5];
 }
 
 set<struct remote> remotes;
@@ -60,20 +60,36 @@ void callback(uint8_t src_mac[6], uint8_t *data, int len) {
             default:
                 cout << "UNKNOWN";
         }
-    } else {
-	cout << "msg of length " << len << " wasn't expected." << endl;
-	cout << "sizeof(wifi_msg_t) -> " << sizeof(wifi_msg_s) << endl;
-	cout << "msg type(int): " << *((int8_t*)data) << endl;
     }
-
     cout << endl;
 }
 
+void send(uint8_t addr[6], wifi_msg_s* msg) {
+    print_mac(addr);
+    cout << " (" << dec << sizeof(wifi_msg_s) << ")< " << msg->type << endl;
+    espnow->set_dst_mac(addr);
+    espnow->send((uint8_t*)msg, sizeof(wifi_msg_s));
+}
+
 void discover() {
-    wifi_msg_s msg;
-    msg.type = DISCOVER;
-    espnow->set_dst_mac(cast_addr);
-    espnow->send((uint8_t *)&msg, sizeof(wifi_msg_s));
+    wifi_msg_s msg = {
+        .type = DISCOVER
+    };
+    send(cast_addr, &msg);
+}
+
+void control(bool on) {
+    bool ron = false;
+    for (auto remote : remotes) {
+        wifi_msg_s msg = {
+            .type = CONTROL,
+            .target = -1,
+            .on = on != ron,
+            .color = 0x228B22,
+        };
+        send(remote.addr, &msg);
+        ron = !ron;
+    }
 }
 
 int main(int argc, char **argv) {
@@ -85,8 +101,19 @@ int main(int argc, char **argv) {
 
     discover();
 
+    auto last = chrono::high_resolution_clock::now();
+    bool on = false;
+
     while (1) {
         this_thread::yield();
+        auto now = chrono::high_resolution_clock::now();
+        auto duration = chrono::duration_cast<chrono::milliseconds>(now - last);
+        if (duration >= chrono::milliseconds{1000}) {
+            cout << "test" << endl;
+            last = now;
+            control(on);
+            on = !on;
+        }
     }
     espnow->end();
 }

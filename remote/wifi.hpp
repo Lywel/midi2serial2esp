@@ -14,7 +14,7 @@
 
 uint8_t cast_addr[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 
-void print_mac_addr(uint8_t *mac_addr) {
+void print_mac_addr(uint8_t* mac_addr) {
     char macStr[18];
     snprintf(macStr, sizeof(macStr), "%02x:%02x:%02x:%02x:%02x:%02x",
              mac_addr[0], mac_addr[1], mac_addr[2], mac_addr[3], mac_addr[4], mac_addr[5]);
@@ -46,12 +46,14 @@ wifi_msg_s ack = {
     .type = ACKNOWLEDGE
 };
 
-void recv_callback(uint8_t *mac, uint8_t *data, uint8_t len) {
+void recv_callback(uint8_t* mac, uint8_t *data, uint8_t len) {
     print_mac_addr(mac);
     PRINT(" ("); PRINT(len); PRINTLN(")> ");
 
     if (len == sizeof(wifi_msg_s)) {
-        switch (((wifi_msg_s*)data)->type) {
+        wifi_msg_s msg;
+        memcpy(&msg, data, len);
+        switch (msg.type) {
         case DISCOVER:
             PRINTLN("> DISCOVER");
             esp_now_send(mac, (uint8_t*)&ack, sizeof(wifi_msg_s));
@@ -61,8 +63,11 @@ void recv_callback(uint8_t *mac, uint8_t *data, uint8_t len) {
             break;
         case CONTROL:
             PRINTLN("> CONTROL");
-            control((wifi_msg_s*)data);
+            control(&msg);
         default:
+            PRINT("> UNKNOWN(");
+            PRINT(msg.type);
+            PRINTLN(")");
             break;
         }
     }
@@ -72,6 +77,7 @@ void espnow_setup() {
     WiFi.mode(WIFI_STA);
     PRINT("\r\n\r\nDevice MAC: ");
     PRINTLN(WiFi.macAddress());
+    PRINTLN(sizeof(wifi_msg_s));
 
     esp_now_init();
     delay(10);

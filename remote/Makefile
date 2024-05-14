@@ -4,7 +4,6 @@ INO := $(shell command -v arduino-cli 2> /dev/null)
 FASTLED_FLAGS=-Wno-register -Wno-deprecated-declarations -Wno-misleading-indentation
 
 COMPILE_FLAGS=\
-	--optimize-for-debug \
 	--export-binaries \
 	--warnings more \
 	--build-property "compiler.cpp.extra_flags=\"$(FASTLED_FLAGS)\"" \
