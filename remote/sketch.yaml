@@ -10,4 +10,4 @@ profiles:
     libraries:
       - MIDI Library (5.0.2)
       - FastLED (3.6.0)
-      - TickTwo (4.4.0)
+      - Ticker (4.4.0)

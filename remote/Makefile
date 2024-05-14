@@ -3,7 +3,8 @@ INO := $(shell command -v arduino-cli 2> /dev/null)
 
 FASTLED_FLAGS=-Wno-register -Wno-deprecated-declarations -Wno-misleading-indentation
 
-COMPILE_FLAGS=--profile esp8266 \
+COMPILE_FLAGS=\
+	--optimize-for-debug \
 	--export-binaries \
 	--warnings more \
 	--build-property "compiler.cpp.extra_flags=\"$(FASTLED_FLAGS)\"" \
@@ -17,13 +18,8 @@ $(ELF): install_arduino $(SRC) $(LIBS)
 
 .PHONY: upload
 upload: install_arduino $(ELF)
-	scp -R build/esp8266.esp8266.generic/* usbpi.local:/tmp/esp8266_remote_build
-	ssh usbpi.local -- "cd midi2serial2esp && sudo ./bin/arduino-cli --config-file arduino-cli.yaml upload -b esp8266:esp8266:generic --verify --port /dev/ttyUSB0 --input-file /tmp/esp8266_remote_build/remote.ino.elf"
-
-.PHONY: serial-monitor
-serial-monitor:
-	ssh usbpi.local -- "cd midi2serial2esp && sudo ./bin/arduino-cli --config-file arduino-cli.yaml monitor -c baudrate=115200 --port /dev/ttyUSB0 --fqbn esp8266:esp8266:generic"
-
+	rsync -auv build/esp8266.esp8266.generic/* usbpi.local:/tmp/esp8266_remote_build
+	ssh usbpi.local -- "cd midi2serial2esp/remote && ~/.local/bin/arduino-cli upload --verify --input-dir /tmp/esp8266_remote_build"
 
 .PHONY: install_arduino
 install_arduino:

@@ -25,7 +25,7 @@ void control(wifi_msg_s* msg) {
     if (msg->on)
     {
         PRINTLN("LED ON");
-#if DEBUG
+#ifdef DEBUG
         digitalWrite(LED, HIGH);
 #else
         leds_on(msg->color);
@@ -34,7 +34,7 @@ void control(wifi_msg_s* msg) {
     else
 {
         PRINTLN("LED OFF");
-#if DEBUG
+#ifdef DEBUG
         digitalWrite(LED, LOW);
 #else
         leds_off();
@@ -42,36 +42,30 @@ void control(wifi_msg_s* msg) {
     }
 }
 
+wifi_msg_s ack = {
+    .type = ACKNOWLEDGE
+};
+
 void recv_callback(uint8_t *mac, uint8_t *data, uint8_t len) {
     print_mac_addr(mac);
-    PRINT(" ("); PRINT(len); PRINT(")> ");
-    repeat(len)
-        PRINT((char)data[i]);
-    PRINTLN("EOD");
+    PRINT(" ("); PRINT(len); PRINTLN(")> ");
 
     if (len == sizeof(wifi_msg_s)) {
-        wifi_msg_s *msg = (wifi_msg_s*)data;
-        wifi_msg_s res;
-
-        switch (msg->type) {
+        switch (((wifi_msg_s*)data)->type) {
         case DISCOVER:
             PRINTLN("> DISCOVER");
-            res.type = ACKNOWLEDGE;
-            esp_now_send(mac, (uint8_t*)&res, sizeof(res));
+            esp_now_send(mac, (uint8_t*)&ack, sizeof(wifi_msg_s));
             break;
         case ACKNOWLEDGE:
             PRINTLN("> ACKNOWLEDGE");
             break;
         case CONTROL:
             PRINTLN("> CONTROL");
-            control(msg);
+            control((wifi_msg_s*)data);
         default:
             break;
         }
     }
-    return;
-
-
 }
 
 void espnow_setup() {

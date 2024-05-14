@@ -1,3 +1,5 @@
+#define DEBUG 1
+
 #include "macros.h"
 #include "wifi.hpp"
 #include "leds.hpp"
