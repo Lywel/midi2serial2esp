@@ -16,7 +16,6 @@ using namespace std;
 
 static uint8_t cast_addr[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 ESPNOW_manager *espnow;
-wifi_msg_s wifi_msg;
 
 struct remote {
     uint8_t addr[6];
@@ -61,15 +60,20 @@ void callback(uint8_t src_mac[6], uint8_t *data, int len) {
             default:
                 cout << "UNKNOWN";
         }
+    } else {
+	cout << "msg of length " << len << " wasn't expected." << endl;
+	cout << "sizeof(wifi_msg_t) -> " << sizeof(wifi_msg_s) << endl;
+	cout << "msg type(int): " << *((int8_t*)data) << endl;
     }
 
     cout << endl;
 }
 
 void discover() {
-    wifi_msg.type = DISCOVER;
+    wifi_msg_s msg;
+    msg.type = DISCOVER;
     espnow->set_dst_mac(cast_addr);
-    espnow->send((uint8_t *)&wifi_msg, sizeof(wifi_msg));
+    espnow->send((uint8_t *)&msg, sizeof(wifi_msg_s));
 }
 
 int main(int argc, char **argv) {
