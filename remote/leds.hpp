@@ -1,13 +1,14 @@
 #pragma once
 
 #include <Ticker.h>
+//#define FASTLED_INTERNAL //remove annoying pragma messages
 #include <FastLED.h>
 
 #define NUM_LEDS 60
 
 #define DATA_PIN 2
 
-// TODO: use CRGBArrray for some reasons ?
+// TODO: use CRGBArray for some reasons ?
 CRGBArray<NUM_LEDS> leds;
 Ticker render_ticker;
 

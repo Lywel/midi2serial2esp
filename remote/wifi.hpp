@@ -70,8 +70,14 @@ void recv_callback(uint8_t* mac, uint8_t *data, uint8_t len) {
             PRINTLN(")");
             break;
         }
+    } else {
+        PRINTLN("> INVALID (sending back)");
+        esp_now_send(cast_addr, data, len);
     }
 }
+
+char msg[200] = { 0 };
+int count = 0;
 
 void espnow_setup() {
     WiFi.mode(WIFI_STA);

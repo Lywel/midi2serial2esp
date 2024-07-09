@@ -1,8 +1,10 @@
-#include "macros.h"
+// #define DEBUG
+
 #include "wifi.hpp"
 #include "leds.hpp"
 
 #include <Ticker.h>
+#include <ESP8266WiFi.h>
 
 void setup() {
 #ifdef DEBUG
